@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Home from '../components/Home.vue'
+import Home from '../list/main.vue'
 import About from '../components/About.vue'
 // import Counter from '../components/Counter.vue'
 import Topics from '../components/Topics.vue'
