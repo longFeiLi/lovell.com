@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 const defaultState = {
   topics: [],
-  count: 0
+  count: 0,
+  cineList: []
 }
 
 const inBrowser = typeof window !== 'undefined'
@@ -19,7 +20,9 @@ const mutations = {
   TOPICS_LIST: (state, topics) => {
     state.topics = topics
   },
-
+  CINE_LIST: (state, cineList) => {
+    state.cineList = cineList
+  },
   INCREMENT: (state) => {
     state.count++
   },

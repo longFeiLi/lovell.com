@@ -1,14 +1,19 @@
 import request from 'axios'
 
-request.defaults.baseURL = '//sapi.seeedstudio.com'
-request.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-const config = { headers: { 'Content-Type': 'application/json;charset=utf-8', 'access-control-allow-origin': '*' } }
-const seeedApi = {
-  getAdvItemList: '/adv/item'
+request.defaults.baseURL = '//localhost:18000'
+request.defaults.method = 'post'
+let headers = {
+  'Content-Type': 'application/json;charset=utf-8',
+  'access-control-allow-origin': '*'
 }
-// .set('Accept', 'application/json')
+request.defaults.headers = headers
+const config = headers
+const seeedApi = {
+  getAdvItemList: '/adv/item',
+  getCineMaList: '/getCineMaList' // 查询所有电影
+}
+
 export const getTopics = ({ commit, state }) => {
-  console.log(state.topics)
   // 是否运用缓存
   if (state.topics.length > 0) {
     return Promise.resolve(state.topics)
@@ -57,6 +62,22 @@ export const getTopics = ({ commit, state }) => {
         ]
       }]
     commit('TOPICS_LIST', data)
+  })
+}
+// http://localhost:18000/getCineMaList
+// .set('Accept', 'application/json')
+export const getCineList = ({ commit, state }) => {
+  // 是否运用缓存
+  if (state.cineList.length > 0) {
+    return Promise.resolve(state.cineList)
+  }
+  return request.post(seeedApi.getCineMaList, config).then((response) => {
+    console.log(response.data)
+    if (response.data.code === 0) {
+      commit('CINE_LIST', response.data.data)
+    }
+  }).catch((err) => {
+    console.log(err)
   })
 }
 
