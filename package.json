@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "axios": "^0.13.1",
+    "element-ui": "^1.1.5",
     "express": "^4.14.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
@@ -50,16 +51,17 @@
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.0.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
-    "file-loader": "^0.8.4",
+    "file-loader": "^0.8.5",
     "phantomjs-prebuilt": "^2.1.10",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
+    "style-loader": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.1.2",
     "vue-loader": "^10.0.0",
     "vue-template-compiler": "^2.0.0",
     "webpack": "^2.1.0-beta.26",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.12.2",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^2.1.2"
+    "webpack-hot-middleware": "^2.12.2"
   }
 }

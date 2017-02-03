@@ -6,13 +6,16 @@
       <div class="address">地址</div>
       <div class="tel">电话</div>
     </div>
-    <div class="item" v-for="cine in cineList">
-      <div class="name">{{cine.name}}</div>
-      <div class="address"><span class="address">{{cine.address}}</span></div>
-      <div class="tel" >{{cine.tel}}</div>
-      {{cineList.mid}}
+    <div class="m-list" >
+      <div class="item" v-for="cine in cineList" @click="show(cine.mid)">
+        <div class="name">{{cine.name}}</div>
+        <div class="address"><span class="address">{{cine.address}}</span></div>
+        <div class="tel" >{{cine.tel}}</div>
+        {{cineList.mid}}
+      </div>
     </div>
     <div style="height: 100px;">
+
     </div>
   </div>
 </template>
@@ -31,6 +34,12 @@ export default {
   },
   beforeMount () {
     fetchInitData(this.$store)
+  },
+  methods: {
+    show (mid) {
+      console.log(mid)
+      this.$store.dispatch('getMovielist', {'mid': mid})
+    }
   }
 }
 </script>
@@ -40,6 +49,12 @@ export default {
     margin: 0 auto;
     div{
        display: inline-block;
+    }
+    .m-list{
+       height: 400px;
+       display: block;
+       width: 100%;
+       overflow: auto;
     }
     .item{
       display: block;

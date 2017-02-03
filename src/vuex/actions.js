@@ -1,80 +1,84 @@
 import request from 'axios'
 
-request.defaults.baseURL = '//localhost:18000'
+request.defaults.baseURL = 'http://localhost:3001'
 request.defaults.method = 'post'
 let headers = {
-  'Content-Type': 'application/json;charset=utf-8',
-  'access-control-allow-origin': '*'
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Access-Control-Allow-Origin': '*'
 }
 request.defaults.headers = headers
 const config = headers
-const seeedApi = {
+const sApi = {
   getAdvItemList: '/adv/item',
-  getCineMaList: '/getCineMaList' // 查询所有电影
+  getCineMaList: '/api/getCineMaList', // 查询所有电影
+  getMovieSite: '/api/getMovieSiteByid' // 根据id 查询电影场次
 }
 
+/**
+ * post请求
+ * @param  {String} options.url   api地址
+ * @param  {String} options.query query参数
+ * @return {Promise}               Promise + getRealToken()
+ */
+const _post = ({ url, query }, commit) => {
+  console.log(query)
+  return request.post(url, query)
+    .then((res) => {
+      // if (commit) commit('FINISH_LOADING')
+      if (res.status >= 200 && res.status < 300) {
+        return res.data
+      }
+      return Promise.reject(new Error(res.status))
+    })
+}
 export const getTopics = ({ commit, state }) => {
   // 是否运用缓存
   if (state.topics.length > 0) {
     return Promise.resolve(state.topics)
   }
-  return request.post(seeedApi.getAdvItemList, {}, config).then((response) => {
+  return request.get(sApi.getAdvItemList, {}, config).then((response) => {
     if (response.data.code === 0) {
       commit('TOPICS_LIST', response.data.data)
     }
   }).catch(() => {
-    let data = [
-      { 'basic': {
-        'id': '18',
-        'item_name': 'NEW PRODUCTS',
-        'item_desc': 'NEW PRODUCTS',
-        'item_sort': '4',
-        'item_status': '1',
-        'item_has_sign': '0',
-        'item_sign_position': 'top',
-        'start_time': '1471449600',
-        'end_time': '1502985600',
-        'is_see_more': '1',
-        'see_more_url': 'https://www.seeedstudio.com/act-4.html'
-      },
-        'product': [{
-          'id': '355',
-          'item_id': '18',
-          'products_id': '2771',
-          'item_product_photo': '/seeed/img/2016-12/VnI0u7WqVyDsZYoIK7FgmF3M.jpg',
-          'item_product_name': 'Raspberry Pi Pioneer600',
-          'item_product_add_time': '1474626414',
-          'item_product_start_time': '1474560000',
-          'item_product_end_time': '1483113600',
-          'is_top': '0',
-          'item_product_sort': '10',
-          'item_product_status': '1',
-          'item_product_url': 'https://www.seeedstudio.com/Raspberry-Pi-Pioneer600-p-2771.html',
-          'product_detail': {
-            'products_id': '2771',
-            'products_name': 'Raspberry Pi Pioneer600',
-            'products_model': '114990832',
-            'products_price': 31.99,
-            'products_image': '/seeed/img/2016-12/VnI0u7WqVyDsZYoIK7FgmF3M.jpg',
-            'discount_price': 31.99
-          }
-        }
-        ]
-      }]
-    commit('TOPICS_LIST', data)
+    // commit('TOPICS_LIST', data)
   })
 }
-// http://localhost:18000/getCineMaList
-// .set('Accept', 'application/json')
+
+/**
+ * [获取电影院名字]
+ * @param  {[type]} options.commit [description]
+ * @param  {[type]} options.state  [description]
+ * @return {[type]}                [description]
+ */
 export const getCineList = ({ commit, state }) => {
   // 是否运用缓存
   if (state.cineList.length > 0) {
     return Promise.resolve(state.cineList)
   }
-  return request.post(seeedApi.getCineMaList, config).then((response) => {
-    console.log(response.data)
-    if (response.data.code === 0) {
-      commit('CINE_LIST', response.data.data)
+  let url = sApi.getCineMaList
+  let query = {}
+  return _post({url, query}, commit).then((response) => {
+    if (response.code === 0) {
+      commit('CINE_LIST', response.data)
+    }
+  }).catch((err) => {
+    console.log(err)
+  })
+}
+/**
+ * [getMovielist 根据id 获取电影院场次]
+ */
+export const getMovielist = ({ commit, state }, query) => {
+  // 是否运用缓存
+  if (state.cineMovie.length > 0) {
+    return Promise.resolve(state.cineMovie)
+  }
+  let url = sApi.getMovieSite
+  console.log(query)
+  return _post({url, query}, commit).then((response) => {
+    if (response.code === 0) {
+      commit('MOVIE_LIST', response.data)
     }
   }).catch((err) => {
     console.log(err)
