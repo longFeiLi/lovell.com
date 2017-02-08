@@ -14,13 +14,14 @@
         {{cineList.mid}}
       </div>
     </div>
-    <div style="height: 100px;">
-
+    <div ref="cineChart" style="width:50%;height:400px;margin-top:20px;" >
+     {{movieList}}
     </div>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import echarts from 'echarts'
 
 const fetchInitData = store => {
   return store.dispatch(`getCineList`)
@@ -37,8 +38,48 @@ export default {
   },
   methods: {
     show (mid) {
-      console.log(mid)
-      this.$store.dispatch('getMovielist', {'mid': mid})
+      this.$store.dispatch('getMovielist', {'mid': mid}).then((res) => {
+        this.setPie(res)
+      })
+    },
+    setPie (option) {
+      let cineChart = echarts.init(this.$refs.cineChart)
+      cineChart.setOption({
+        backgroundColor: '#2c343c',
+        'color': [
+          '#eaf889',
+          '#6699FF',
+          '#ff6666',
+          '#3cb371',
+          '#d5b158',
+          '#38b6b6'
+        ],
+        title: {
+          text: '电影场次信息',
+          left: 'center',
+          top: 20,
+          textStyle: {
+            color: '#ccc'
+          }
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        series: [{
+          name: '访问来源',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '50%'],
+          data: option.sort(function (a, b) { return a.value - b.value }),
+          roseType: 'angle',
+          animationType: 'scale',
+          animationEasing: 'elasticOut',
+          animationDelay: function (idx) {
+            return Math.random() * 200
+          }
+        }]
+      })
     }
   }
 }

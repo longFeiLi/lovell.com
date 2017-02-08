@@ -1,4 +1,5 @@
 import request from 'axios'
+import querystring from 'querystring'
 
 request.defaults.baseURL = 'http://localhost:3001'
 request.defaults.method = 'post'
@@ -21,8 +22,7 @@ const sApi = {
  * @return {Promise}               Promise + getRealToken()
  */
 const _post = ({ url, query }, commit) => {
-  console.log(query)
-  return request.post(url, query)
+  return request.post(url, querystring.stringify(query))
     .then((res) => {
       // if (commit) commit('FINISH_LOADING')
       if (res.status >= 200 && res.status < 300) {
@@ -71,14 +71,14 @@ export const getCineList = ({ commit, state }) => {
  */
 export const getMovielist = ({ commit, state }, query) => {
   // 是否运用缓存
-  if (state.cineMovie.length > 0) {
-    return Promise.resolve(state.cineMovie)
-  }
+  // if (state.cineMovie.length > 0) {
+  //   return Promise.resolve(state.cineMovie)
+  // }
   let url = sApi.getMovieSite
-  console.log(query)
   return _post({url, query}, commit).then((response) => {
     if (response.code === 0) {
       commit('MOVIE_LIST', response.data)
+      return Promise.resolve(response.data)
     }
   }).catch((err) => {
     console.log(err)

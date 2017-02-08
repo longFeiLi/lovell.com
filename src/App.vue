@@ -3,16 +3,21 @@
       <div class="header-top">
           <div class="top-menu"> 
               <ul>
-                <li><router-link to="/" class="active" >首页</router-link></li>
-                <li><router-link to="/topics">列表</router-link></li>
-                <li><router-link to="/counter">资料</router-link></li>
-                <li><router-link to="/about">关于</router-link></li>
+                <li><router-link to="/"  v-bind:class="{ active: $route.path === '/' }"  >首页</router-link></li>
+                <li><router-link to="/list" v-bind:class="{ active: $route.path === '/list' }" >列表</router-link></li>
+                <li><router-link to="/counter" v-bind:class="{ active: $route.path === '/counter' }">资料</router-link></li>
+                <li><router-link to="/about" v-bind:class="{ active: $route.path === '/about' }">关于</router-link></li>
               </ul>
           </div>
          <div class="clearfix"></div>
       </div>
      <router-view class="view"></router-view>
+     <div class="" >
+        Copyright © 2008-2017 lovell.com.cn
+     </div>
   </div>
+  <!-- 底部 -->
+  
 </template>
 <style lang="less">
   body {
@@ -58,7 +63,4 @@
       }
     }
   }
-  
-
-  
 </style>
