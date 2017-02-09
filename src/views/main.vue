@@ -15,7 +15,6 @@
       </div>
     </div>
     <div ref="cineChart" style="width:50%;height:400px;margin-top:20px;" >
-     {{movieList}}
     </div>
   </div>
 </template>
