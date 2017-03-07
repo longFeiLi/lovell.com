@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import About from '../components/About.vue'
-// import Counter from '../components/Counter.vue'
+import counter from '../views/counter.vue'
 import list from '../views/list.vue'
 import VueRouter from 'vue-router'
 // import { createFeiView } from '../components/createFeiView.js'
@@ -16,7 +16,7 @@ const router = new VueRouter({
     { path: '/', component: createCineView('main') },
     { path: '/long', component: Home },
     { path: '/list', component: list },
-    // { path: '/Counter', component: createFeiView('topics') },
+    { path: '/counter', component: counter },
     { path: '/About', component: About }
   ]
 })

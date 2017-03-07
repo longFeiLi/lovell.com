@@ -1,6 +1,16 @@
 <template>
   <div class="main">
-    <div><h1>电影列表</h1></div>
+    <div class="page-title">
+        <div class="row">
+          <div class="col-md-9 col-xs-12">
+            <h1><b>Work hard. Dream big.</b><br>
+            </h1>
+          </div>
+        </div>
+    </div>
+    <!-- 增加地图 -->
+    <div id="mapChart" style="width:100%;height:400px;"></div>
+
     <div class="title">
       <div class="name">名称</div>
       <div class="address">地址</div>
@@ -79,6 +89,12 @@ export default {
           }
         }]
       })
+    },
+    /**
+     * [setMapChart 地图绘制中显示深圳所有地方的电影院]
+     */
+    setMapChart () {
+      console.log('地图')
     }
   }
 }
