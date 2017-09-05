@@ -1,8 +1,8 @@
 import request from 'axios'
 import querystring from 'querystring'
 
-// request.defaults.baseURL = 'http://www.lovell.com.cn:3001'
-request.defaults.baseURL = 'http://localhost:3001'
+request.defaults.baseURL = 'http://www.lovell.com.cn:3001'
+// request.defaults.baseURL = 'http://localhost:3001'
 request.defaults.method = 'post'
 let headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
