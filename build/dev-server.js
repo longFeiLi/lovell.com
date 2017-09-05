@@ -4,6 +4,8 @@ const MFS = require('memory-fs')
 const clientConfig = require('./webpack.client.config')
 const serverConfig = require('./webpack.server.config')
 
+
+
 module.exports = function setupDevServer (app, onUpdate) {
   // setup on the fly compilation + hot-reload
   clientConfig.entry.app = ['webpack-hot-middleware/client', clientConfig.entry.app]

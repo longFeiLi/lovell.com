@@ -1,5 +1,4 @@
 .DS_store
-dist/
 docs/_build/
 mopidy.log*
 node_modules/
