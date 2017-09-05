@@ -10,7 +10,7 @@
     "logs",
     "public"
   ],
-  "instances"    :2,
+  "instances"    :1,
   "watch_options": {
     "followSymlinks": false
   },
