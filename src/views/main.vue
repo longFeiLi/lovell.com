@@ -1,30 +1,63 @@
 <template>
   <div class="main">
     <div class="page-title">
-        <div class="row">
-          <div class="col-md-9 col-xs-12">
-            <h1><b>Work hard. Dream big.</b><br>
+        <div>
+            <h1 class="sub-title"><b>欢迎Lovell小窝</b>
             </h1>
-          </div>
         </div>
     </div>
-    <!-- 增加地图 -->
-    <div id="mapChart" style="width:100%;height:400px;"></div>
 
-    <div class="title">
-      <div class="name">名称</div>
-      <div class="address">地址</div>
-      <div class="tel">电话</div>
-    </div>
-    <div class="m-list" >
-      <div class="item" v-for="cine in cineList" @click="show(cine.mid)">
-        <div class="name">{{cine.name}}</div>
-        <div class="address"><span class="address">{{cine.address}}</span></div>
-        <div class="tel" >{{cine.tel}}</div>
-        {{cineList.mid}}
+    <div class="conn">
+      <p class="title">电影信息</p>
+      <div class="warp">
+        <div>名称: 民治优城百川国际影城 (0755-88899039) </div>
+        <div>地址: 宝安区民治大道水尾村路段优城购物中心南区5层</div>
       </div>
-    </div>
-    <div ref="cineChart" style="width:50%;height:400px;margin-top:20px;" >
+      <div class="mt20">
+         <div ref="cineChart" style="width:100%;height:320px;" >
+         </div>
+         <div v-if="screening">
+            <el-table
+              :data="screening"
+              height="250"
+              border
+              style="width: 100%">
+              <el-table-column
+                prop="name"
+                label="名称"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="price"
+                label="价格"
+                sortable
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="version"
+                label="厅室">
+              </el-table-column>
+              <el-table-column
+                prop="showtime"
+                sortable
+                label="时间">
+              </el-table-column>
+              <el-table-column
+                prop="language"
+                sortable
+                label="版本">
+              </el-table-column>
+              <el-table-column
+                prop="data"
+                sortable
+                label="更新日期">
+              </el-table-column>
+              
+            </el-table>
+         </div>
+      </div>
+
+    
     </div>
   </div>
 </template>
@@ -33,125 +66,119 @@ import { mapGetters } from 'vuex'
 import echarts from 'echarts'
 
 const fetchInitData = store => {
-  return store.dispatch(`getCineList`)
+  return store.dispatch('getMovielist');
 }
 export default {
   prefetch: fetchInitData,
   computed: {
     ...mapGetters({
-      cineList: 'getCineList'
+      cineMovie: 'getMovielist',
+      screening: 'getScreeningList'
     })
   },
   beforeMount () {
-    fetchInitData(this.$store)
+    fetchInitData(this.$store);
+  },
+  mounted () {
+    this.setPie();
   },
   methods: {
-    show (mid) {
-      this.$store.dispatch('getMovielist', {'mid': mid}).then((res) => {
-        this.setPie(res)
-      })
+    setPie () {
+      let ths = this;
+      let resObj = this.cineMovie;
+      let cineChart = echarts.init(this.$refs.cineChart);
+      let option = {
+            title : {
+                text: '电影排期占比',
+                subtext: '每天更新(点击图查看电影排期)',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                x : 'center',
+                y : 'bottom',
+                data:['战狼','rose2','rose3','rose4','rose5','rose6','rose7','rose8']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'电影排期占比',
+                    type:'pie',
+                    radius : [20, 80],
+                    center : ['50%', '50%'],
+                    roseType : 'area',
+                    data: resObj.sort(function (a, b) { return a.value - b.value })
+                }
+            ]
+      };
+      cineChart.setOption(option);
+      cineChart.on('click', function (params) {
+          // 控制台打印数据的名称
+          ths.clickScreen(params.name);
+      });
     },
-    setPie (option) {
-      let cineChart = echarts.init(this.$refs.cineChart)
-      cineChart.setOption({
-        backgroundColor: '#2c343c',
-        'color': [
-          '#eaf889',
-          '#6699FF',
-          '#ff6666',
-          '#3cb371',
-          '#d5b158',
-          '#38b6b6'
-        ],
-        title: {
-          text: '电影场次信息',
-          left: 'center',
-          top: 20,
-          textStyle: {
-            color: '#ccc'
-          }
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        series: [{
-          name: '访问来源',
-          type: 'pie',
-          radius: '55%',
-          center: ['50%', '50%'],
-          data: option.sort(function (a, b) { return a.value - b.value }),
-          roseType: 'angle',
-          animationType: 'scale',
-          animationEasing: 'elasticOut',
-          animationDelay: function (idx) {
-            return Math.random() * 200
-          }
-        }]
+    clickScreen (name) {
+      console.log('点击事件' + name);
+      this.$store.dispatch('getScreening', { name }).then((res) => {
+         console.log(res);
       })
-    },
-    /**
-     * [setMapChart 地图绘制中显示深圳所有地方的电影院]
-     */
-    setMapChart () {
-      console.log('地图')
     }
   }
 }
 </script>
 <style lang="less">
   .main{
-    width: 1140px;
+    width: 1170px;
     margin: 0 auto;
-    div{
-       display: inline-block;
+    .sub-title{
+      text-align: center;
+      margin: 10px 0px;
+      line-height: 50px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      letter-spacing: 1.5px;
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
     }
-    .m-list{
-       height: 400px;
-       display: block;
-       width: 100%;
-       overflow: auto;
-    }
-    .item{
-      display: block;
-      font-size:14px;
-      cursor: pointer;
-      line-height: 20px;
-      border: 1px solid #ccc;
-      border-top: 0px solid #ccc;
-      padding: 5px;
-      .name{
-        width: 300px;
+    .conn{
+      width: 90%;
+      margin: 0 auto;
+      font-size: 14px;
+      color: #475669;
+      background: #FFFFFF;
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
+      border-radius: 5px;
+      padding: 20px;
+      .title{
+        font-size: 16px;
+        font-weight: bold;
       }
-      .address{
-        width: 450px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .tel{
-        width: 150px;
-      }
-      &:hover{
-        background: #B2EBF2;
+      .warp{
+        display: flex;
+        margin-top: 10px;
+        div{
+          flex:1;
+          text-align: center;
+        }
       }
     }
-    .title{
-      display: block;
-      font-size:16px;
-      background: #0097A7;
-      padding: 5px 0px;
-      .name{
-        width: 300px;
-        text-align: center;
-      }
-      .address{
-        width: 450px;
-        text-align: center;
-      }
-      .tel{
-        width: 150px;
-        text-align: center
-      }
+    .mt20{
+      margin-top: 20px;
     }
   }
 </style>

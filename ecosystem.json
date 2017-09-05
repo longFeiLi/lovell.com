@@ -1,0 +1,20 @@
+{
+  "name"        : "lovell",  // 应用名称
+  "script"      : "server.js",  // 实际启动脚本
+  "watch": [  // 监控变化的目录，一旦变化，自动重启
+    "dist",
+    "src"
+  ],
+  "ignore_watch" : [  // 从监控目录中排除
+    "node_modules", 
+    "logs",
+    "public"
+  ],
+  "instances"    :2,
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "env": {
+      "NODE_ENV": "production"  // 环境参数，当前指定为生产环境
+  }
+}

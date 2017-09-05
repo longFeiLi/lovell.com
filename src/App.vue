@@ -3,12 +3,8 @@
      <header>
         <div class="logo">
           <a href="//www.lovell.com.cn">
-            龙飞Lovell
-            <!-- <img src="assets/images/logo.png" alt=""> -->
+            Lovell
           </a>
-        </div>
-        <div class="mobile-menu">
-          <span class="line"></span>
         </div>
         <nav>
           <ul>
@@ -20,18 +16,30 @@
         </nav>
     </header>
      <router-view class="view"></router-view>
-     <div class="" >
+     <div class="txt-footer" >
         Copyright © 2008-2017 lovell.com.cn<br/>
-        Email: ongfeili0925@gmail.com
+        Email: longfeili0925@gmail.com
      </div>
   </div>
   <!-- 底部 -->
 </template>
 <style lang="less">
   @import "assets/main.less";
-  body {
-    .clearfix{
-      clear: none;
+  @import '../node_modules/element-ui/lib/theme-default/index.css';
+</style>
+
+<script>
+export default {
+  name: 'my-menu',
+  data () {
+    return {
+      menus: ''
+    }
+  },
+  methods: {
+    goTo () {
+      console.log(this.$route.path)
     }
   }
-</style>
+}
+</script>

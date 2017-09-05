@@ -6,7 +6,7 @@ import * as getters from './getters'
 Vue.use(Vuex)
 
 const defaultState = {
-  topics: [],
+  screeningList: [],
   count: 0,
   cineList: [],
   cineMovie: []
@@ -18,20 +18,14 @@ const inBrowser = typeof window !== 'undefined'
 const state = (inBrowser && window.__INITIAL_STATE__) || defaultState
 
 const mutations = {
-  TOPICS_LIST: (state, topics) => {
-    state.topics = topics
+  SCREENING_LIST: (state, screening) => {
+    state.screeningList = screening
   },
   CINE_LIST: (state, cineList) => {
     state.cineList = cineList
   },
   MOVIE_LIST: (state, cineMovie) => {
     state.cineMovie = cineMovie
-  },
-  INCREMENT: (state) => {
-    state.count++
-  },
-  DECREMENT: (state) => {
-    state.count--
   }
 }
 

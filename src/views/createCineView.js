@@ -7,7 +7,7 @@ export function createCineView (type) {
   return {
     name: `${type}-stories-view`,
     preFetch (store) {
-      return store.dispatch('getCineList')
+      return store.dispatch('getMovielist')
     },
     render (h) {
       return h(cine, {props: {type}})
